@@ -1,16 +1,16 @@
 #pragma once
 class Container
 {
-	int size{4};
-	int staticArr[4]{};
-	int* staticArr_ptr{ staticArr };
-	int* dynamicArr{};
+
+	int size = 4;
+	int* arr = new int[size];
+	int pos = 0;
 
 public:
 	Container();
 	~Container();
 	void pushBack();
-	void createNewArray();
+	void extendArray();
 	int getIndex();
 	void setIndex();
 	void clear();

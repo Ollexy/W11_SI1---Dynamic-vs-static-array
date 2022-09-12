@@ -8,43 +8,38 @@ Container::Container()
 
 Container::~Container()
 {
-	delete[] dynamicArr;
-	delete[] staticArr_ptr;
+	delete[] arr;
 }
 
 void Container::pushBack()
 {
+
+	if (pos == size) {
+		extendArray();
+	}
+
 	std::cout << "Enter item to add: ";
 	int item{};
 	std::cin >> item;
 
-	for (size_t i{ 0 }; i < size; i++) {
-		if (staticArr_ptr[i] == NULL) {
-			staticArr_ptr[i] = item;				//nie dziala tworzenie nowej tablicy, jeszcze nie doszedlem do tego dlaczego tak sie dzieje
-			break;
-		}
-		else if (staticArr_ptr[size-1] != NULL) {
-			createNewArray();
-		}
-	}
+	arr[pos] = item;		
+	pos++;
+	
 }
 
-void Container::createNewArray()
+void Container::extendArray()
 {
-	std::cout << "Enter size of new array: ";
-	std::cin >> size;
+	int* previousArr = arr;
 	std::cin.ignore();
 	
-	dynamicArr = new int[size];
-	staticArr_ptr = dynamicArr;
-
-	for (size_t i{ 0 }; i <= size; i++) {
-		staticArr_ptr[i] = NULL;
+	size = size * 2;
+	arr = new int[size];
+	
+	for (size_t i{ 0 }; i < size/2; i++) {
+		arr[i] = previousArr[i];
 	}
 
-	for (size_t i{ 0 }; i < 4; i++) {
-		staticArr_ptr[i] = staticArr[i];
-	}
+	delete[] previousArr;
 }
 
 int Container::getIndex()
@@ -53,9 +48,9 @@ int Container::getIndex()
 	std::cout << "Enter index number: ";
 	std::cin >> index;
 
-	std::cout << staticArr[index] << std::endl << std::endl;
+	std::cout << arr[index] << std::endl << std::endl;
 
-	return staticArr[index];
+	return arr[index];
 }
 
 void Container::setIndex()
@@ -66,27 +61,26 @@ void Container::setIndex()
 	std::cout << "Enter new value for: ";
 	std::cin >> value;
 
-	staticArr[index] = value;
+	arr[index] = value;
 }
 
 void Container::clear()
 {
-	for (auto i : staticArr) {
-		staticArr[i] = 0;
-	}
-	delete[] dynamicArr;
+	pos = 0;
 }
 
 void Container::displayArr()
 {
 	int index{0};
+	std::cout << "Size of arr: " << size << std::endl << std::endl;
 	std::cout << std::endl;
 	std::cout << "\t------------------------------\n";
-	for (size_t i{ 0 }; i < 4; i++) {
-		std::cout << "\t" << index << ". " << staticArr_ptr[i];
+	for (size_t i{ 0 }; i < pos; i++) {
+		std::cout << "\t" << index << ". " << arr[i];
 		index++;
 	}
 	std::cout << std::endl << std::endl;
+
 }
 
 void Container::menu()
